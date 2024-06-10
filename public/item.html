@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html class="no-js" lang="">
+  <head>
+    <script type="text/javascript" src="assets/js/app.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.5/flowbite.min.css"
+      rel="stylesheet"
+    />
+    <script
+      type="text/javascript"
+      src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"
+    ></script>
+
+    <input type="hidden" name="rat" id="ratAccountId" value="999" />
+    <input type="hidden" name="rat" id="ratServiceId" value="999" />
+    <input type="hidden" name="rat" id="ratPagePerformance" value="true" />
+    <input type="hidden" name="rat" id="ratItemId" value="xxx,yyy" />
+    <input type="hidden" name="rat" id="ratPageName" value="demo_item" />
+    <script>
+      const query = window.location.search;
+      const urlparams = new URLSearchParams(query);
+      const itemid = urlparams.get("id");
+
+      document.getElementById("ratItemId").value = itemid.toString();
+    </script>
+    <script src="https://r.r10s.jp/com/rat/js/rat-main.js"></script>
+  </head>
+
+  <body onload="getItemInfo()">
+    <div class="flex grid grid-cols-1 justify-end">
+      <nav class="bg-white border-gray-200 dark:bg-gray-900">
+        <div
+          class="max-w-screen-xl flex flex-wrap items-center justify-end mx-auto p-4"
+        >
+          <div class="hidden w-full md:block md:w-auto" id="navbar">
+            <ul
+              id="navbar-options-container"
+              class="font-medium flex flex-col p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700"
+            >
+              <li>
+                <a
+                  href="/"
+                  class="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
+                  >Home</a
+                >
+              </li>
+              <li>
+                <a
+                  href="/about.html"
+                  class="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
+                  >About</a
+                >
+              </li>
+              <li id="cart-link">
+                <a
+                  href="/cart.html"
+                  class="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
+                  >Cart</a
+                >
+              </li>
+              <li id="bookmark-link">
+                <a
+                  href="/bookmarks.html"
+                  class="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
+                  >Bookmarks</a
+                >
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </div>
+
+    <div class="flex items-center justify-center">
+      <div>
+        <h1
+          id="item-name"
+          class="mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white"
+        ></h1>
+      </div>
+    </div>
+
+    <div class="relative w-full p-6" data-carousel="static">
+      <!-- Carousel wrapper -->
+      <div
+        data-ratId="item-img-carousel"
+        data-ratEvent="appear"
+        id="carousel"
+        class="relative h-56 overflow-hidden rounded-lg md:h-96 bg-gray-300"
+      >
+        <!-- Item 1 -->
+        <div class="duration-700 ease-in-out" data-carousel-item="active">
+          <img
+            data-ratId="item-img-1"
+            data-ratEvent="appear"
+            src="assets/images/1.jpg"
+            class="absolute block h-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2"
+            alt="..."
+          />
+        </div>
+        <!-- Item 2 -->
+        <div class="hidden duration-700 ease-in-out" data-carousel-item>
+          <img
+            data-ratId="item-img-2"
+            data-ratEvent="appear"
+            src="assets/images/2.jpeg"
+            class="absolute block h-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2"
+            alt="..."
+          />
+        </div>
+        <!-- Item 3 -->
+        <div class="hidden duration-700 ease-in-out" data-carousel-item>
+          <img
+            data-ratId="item-img-3"
+            data-ratEvent="appear"
+            src="assets/images/3.jpeg"
+            class="absolute block h-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2"
+            alt="..."
+          />
+        </div>
+        <!-- Item 4 -->
+        <div class="hidden duration-700 ease-in-out" data-carousel-item>
+          <img
+            data-ratId="item-img-4"
+            data-ratEvent="appear"
+            src="assets/images/4.png"
+            class="absolute block h-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2"
+            alt="..."
+          />
+        </div>
+        <!-- Item 5 -->
+        <div class="hidden duration-700 ease-in-out" data-carousel-item>
+          <img
+            data-ratId="item-img-5"
+            data-ratEvent="appear"
+            src="assets/images/5.jpeg"
+            class="absolute block h-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2"
+            alt="..."
+          />
+        </div>
+      </div>
+      <!-- Slider controls -->
+      <button
+        id="carousel-prev"
+        type="button"
+        class="absolute top-0 left-0 z-30 flex items-center justify-center h-full px-8 cursor-pointer group focus:outline-none"
+      >
+        <span
+          class="inline-flex items-center justify-center w-8 h-8 rounded-full sm:w-10 sm:h-10 bg-white/30 dark:bg-gray-800/30 group-hover:bg-white/50 dark:group-hover:bg-gray-800/60 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none"
+        >
+          <svg
+            aria-hidden="true"
+            class="w-5 h-5 text-white sm:w-6 sm:h-6 dark:text-gray-800"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M15 19l-7-7 7-7"
+            ></path>
+          </svg>
+          <span class="sr-only">Previous</span>
+        </span>
+      </button>
+      <button
+        id="carousel-next"
+        type="button"
+        class="absolute top-0 right-0 z-30 flex items-center justify-center h-full px-8 cursor-pointer group focus:outline-none"
+      >
+        <span
+          class="inline-flex items-center justify-center w-8 h-8 rounded-full sm:w-10 sm:h-10 bg-white/30 dark:bg-gray-800/30 group-hover:bg-white/50 dark:group-hover:bg-gray-800/60 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none"
+        >
+          <svg
+            aria-hidden="true"
+            class="w-5 h-5 text-white sm:w-6 sm:h-6 dark:text-gray-800"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M9 5l7 7-7 7"
+            ></path>
+          </svg>
+          <span class="sr-only">Next</span>
+        </span>
+      </button>
+    </div>
+
+    <div class="flex items-center justify-center">
+      <div id="item-image" class="grid gap-4 w-4/5">
+        <div>
+          <img
+            class="h-auto max-w-full rounded-lg"
+            src="https://flowbite.s3.amazonaws.com/docs/gallery/featured/image.jpg"
+            alt=""
+          />
+        </div>
+        <div class="grid grid-cols-3 gap-4">
+          <div>
+            <img
+              class="h-auto max-w-full rounded-lg"
+              src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-1.jpg"
+              alt=""
+            />
+          </div>
+          <div>
+            <img
+              class="h-auto max-w-full rounded-lg"
+              src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-2.jpg"
+              alt=""
+            />
+          </div>
+          <div>
+            <img
+              class="h-auto max-w-full rounded-lg"
+              src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-3.jpg"
+              alt=""
+            />
+          </div>
+          <div>
+            <img
+              class="h-auto max-w-full rounded-lg"
+              src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-4.jpg"
+              alt=""
+            />
+          </div>
+          <div>
+            <img
+              class="h-auto max-w-full rounded-lg"
+              src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-5.jpg"
+              alt=""
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="flex items-center justify-center">
+      <div class="w-3/5 flex justify-center">
+        <p
+          id="item-desc"
+          class="text-justify max-w-lg text-3xl font-semibold leading-loose text-gray-900 dark:text-white"
+        >
+          Description
+        </p>
+      </div>
+    </div>
+
+    <!-- Main modal -->
+    <span data-modal-target="defaultModal"></span>
+    <div
+      id="defaultModal"
+      tabindex="-1"
+      aria-hidden="true"
+      data-modal-backdrop="static"
+      class="fixed top-0 left-0 right-0 z-50 flex justify-center hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full"
+    >
+      <div class="relative w-full max-w-2xl max-h-full">
+        <!-- Modal content -->
+        <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+          <!-- Modal header -->
+          <div
+            class="flex items-start justify-between p-4 border-b rounded-t dark:border-gray-600"
+          >
+            <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
+              Terms of Service
+            </h3>
+            <button
+              type="button"
+              class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
+              data-modal-hide="defaultModal"
+            >
+              <svg
+                aria-hidden="true"
+                class="w-5 h-5"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                  clip-rule="evenodd"
+                ></path>
+              </svg>
+              <span class="sr-only">Close modal</span>
+            </button>
+          </div>
+          <!-- Modal body -->
+          <div class="p-6 space-y-6">
+            <p
+              class="text-base leading-relaxed text-gray-500 dark:text-gray-400"
+            >
+              With less than a month to go before the European Union enacts new
+              consumer privacy laws for its citizens, companies around the world
+              are updating their terms of service agreements to comply.
+            </p>
+            <p
+              class="text-base leading-relaxed text-gray-500 dark:text-gray-400"
+            >
+              The European Union’s General Data Protection Regulation (G.D.P.R.)
+              goes into effect on May 25 and is meant to ensure a common set of
+              data rights in the European Union. It requires organizations to
+              notify users as soon as possible of high-risk data breaches that
+              could personally affect them.
+            </p>
+          </div>
+          <!-- Modal footer -->
+          <div
+            class="flex items-center p-6 space-x-2 border-t border-gray-200 rounded-b dark:border-gray-600"
+          >
+            <button
+              data-modal-hide="defaultModal"
+              type="button"
+              class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+            >
+              I accept
+            </button>
+            <button
+              data-modal-hide="defaultModal"
+              type="button"
+              class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600"
+            >
+              Decline
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="w-2/5 items-left grid grid-cols-1 gap-4 p-1">
+      <div>
+        <h1
+          id="item-price"
+          class="text-xl font-semibold text-gray-900 dark:text-white p-4"
+        ></h1>
+      </div>
+      <div class="w-2/5 grid grid-cols-2 gap-4 items-center">
+        <p class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+          Quantity
+        </p>
+        <input
+          type="number"
+          id="item-qty"
+          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          value="1"
+          required
+        />
+      </div>
+      <div class="flex grid grid-cols-3 gap-4">
+        <input
+          data-ratId="add-to-cart"
+          data-ratEvent="click"
+          type="button"
+          class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+          value="Add to cart"
+          onclick="addToCart(document.getElementById('item-qty').value)"
+        />
+        <input
+          data-value="Bookmark"
+          type="button"
+          class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600"
+          value="Bookmark"
+        />
+        <input
+          type="button"
+          class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600"
+          value="Go back!"
+          onclick="history.back()"
+        />
+      </div>
+    </div>
+
+    <div
+      class="fixed bottom-10 right-0 p-4 bg-gray-500 text-white grid grid-cols-1 gap-4"
+    >
+      <div class="flex grid grid-cols-1 gap-4">
+        <p id="float-name" class="text-right"></p>
+        <p id="float-price" class="text-right"></p>
+      </div>
+      <div class="flex grid grid-cols-1 gap-4">
+        <input
+          data-ratId="add-to-cart"
+          data-ratEvent="click"
+          type="button"
+          class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+          value="Add to cart"
+          onclick="addToCart(document.getElementById('item-qty').value)"
+        />
+        <input
+          data-value="Bookmark"
+          type="button"
+          class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600"
+          value="Bookmark"
+        />
+      </div>
+    </div>
+  </body>
+</html>

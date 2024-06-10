@@ -1,0 +1,54 @@
+<!doctype html>
+<html class="no-js" lang="">
+  <head>
+    <script type="text/javascript" src="assets/js/app.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script
+      type="text/javascript"
+      src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"
+    ></script>
+
+    <input type="hidden" name="rat" id="ratAccountId" value="999" />
+    <input type="hidden" name="rat" id="ratServiceId" value="999" />
+    <input type="hidden" name="rat" id="ratPagePerformance" value="true" />
+    <input type="hidden" name="rat" id="ratPageType" value="cart_checkout" />
+    <input type="hidden" name="rat" id="ratPageName" value="demo_checkout" />
+    <script src="https://r.r10s.jp/com/rat/js/rat-main.js"></script>
+  </head>
+
+  <body onload="displayCart(false)">
+    <div class="p-4">
+      <div class="flex p-1">
+        <h1 class="text-gray-900 md:text-xl lg:text-2xl dark:text-white">Payment Options</h1>
+      </div>
+      <div class="gap-4 p-4">
+        <input type="radio" id="cc" name="payment-option" value="cc" checked />
+        <label for="cc">Credit Card</label><br />
+        <input type="radio" id="cash" name="payment-option" value="c" />
+        <label for="cc">Cash</label><br />
+        <input type="radio" id="Convenience Store" name="payment-option" value="cs" />
+        <label for="cc">Convenience Store</label><br />
+      </div>
+    </div>
+    <div class="flex p-4">
+      <p class="text-gray-900 md:text-xl lg:text-2xl dark:text-white" id="total-price"></p>
+    </div>
+    <div class="flex justify-center">
+      <ul id="cart-items" class="grid grid-cols-1 gap-4 items-center max-w-md"></ul>
+    </div>
+    <div class="flex justify-center gap-4 p-4">
+      <input
+        type="button"
+        class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600"
+        onclick="goToConfirmPurchase()"
+        value="Confirm purchase"
+      />
+      <input
+        type="button"
+        class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600"
+        onclick="goToCart()"
+        value="Back to Cart"
+      />
+    </div>
+  </body>
+</html>

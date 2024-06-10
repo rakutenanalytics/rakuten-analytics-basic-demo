@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html class="no-js" lang="">
+  <head>
+    <script type="text/javascript" src="assets/js/app.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script
+      type="text/javascript"
+      src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"
+    ></script>
+
+    <input type="hidden" name="rat" id="ratAccountId" value="999" />
+    <input type="hidden" name="rat" id="ratServiceId" value="999" />
+    <input type="hidden" name="rat" id="ratPagePerformance" value="true" />
+    <input type="hidden" name="rat" id="ratPageName" value="demo_bookmark" />
+    <script src="https://r.r10s.jp/com/rat/js/rat-main.js"></script>
+  </head>
+
+  <body onload="displayBookmarks()">
+    <div class="flex grid grid-cols-1 justify-end">
+      <nav class="bg-white border-gray-200 dark:bg-gray-900">
+        <div
+          class="max-w-screen-xl flex flex-wrap items-center justify-end mx-auto p-4"
+        >
+          <div class="hidden w-full md:block md:w-auto" id="navbar">
+            <ul
+              id="navbar-options-container"
+              class="font-medium flex flex-col p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700"
+            >
+              <li>
+                <a
+                  href="/"
+                  class="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
+                  >Home</a
+                >
+              </li>
+              <li id="about-link">
+                <a
+                  href="/about.html"
+                  class="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
+                  >About</a
+                >
+              </li>
+              <li id="cart-link">
+                <a
+                  href="/cart.html"
+                  class="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
+                  >Cart</a
+                >
+              </li>
+              <li>
+                <a
+                  href="/bookmarks.html"
+                  class="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
+                  >Bookmarks</a
+                >
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </div>
+
+    <div id="bookmark-items-container" class="flex items-center justify-center">
+      <div class="w-3/5 flex justify-center">
+        <ul
+          id="bookmark-items"
+          class="grid grid-cols-1 gap-4 items-center max-w-md"
+        ></ul>
+      </div>
+    </div>
+
+    <div class="flex justify-start gap-4 p-4">
+      <input
+        type="button"
+        onClick="clearBookmarks()"
+        value="Clear Bookmarks"
+        data-ratid="clearbookmark"
+        data-ratevent="click"
+        class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600"
+      />
+    </div>
+  </body>
+</html>
