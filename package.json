@@ -1,8 +1,8 @@
 {
   "type": "module",
-  "name": "demo-pages",
+  "name": "rakuten-analytics-basic-demo",
   "version": "1.0.0",
-  "description": "normal MPA demo pages for js repo",
+  "description": "simple demo website integrating Rakuten Analytics",
   "main": "index.js",
   "scripts": {
     "start": "serve public/ -p 8080"
