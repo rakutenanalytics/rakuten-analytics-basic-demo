@@ -5,11 +5,13 @@
   "description": "simple demo website integrating Rakuten Analytics",
   "main": "index.js",
   "scripts": {
-    "start": "serve public/ -p 8080"
+    "start": "http-server public -p 8080",
+    "prettier": "prettier --write \"public/**/*.{tsx,ts,jsx,js}\""
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "serve": "^14.2.0"
+    "http-server": "^14.1.1",
+    "prettier": "^3.3.2"
   }
 }
