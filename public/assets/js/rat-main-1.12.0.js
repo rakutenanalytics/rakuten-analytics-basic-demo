@@ -800,162 +800,117 @@ var RAT = RAT || {};
     });
   }
 
-  // Data attributes driven events (jQuery compatible)
-  if ($) {
-    $(function() {
-      var $win = $(window), $doc = $(document);
-      defineAppear($);
+  function handleRedirect(elem) {
+    if (!RAL.live) {
+      return;
+    }
 
-      RAT.bindAppear = function($elem, acc, aid) {
-        var $ratAppear = $elem.filter(function() {
-          return parseEventConfig($(this).attr('data-ratEvent')).appear !== undefined;
-        });
-        $ratAppear.appear(function () {
-          var $this = $(this);
-          var config = parseEventConfig($(this).attr('data-ratEvent')).appear;
-          RAL.callQueue.push(['setParameters', getDelta($this.attr('data-ratParam'))]);
-          RAL.callQueue.push(['setAccountId', acc || parameters.acc]);
-          RAL.callQueue.push(['setServiceId', aid || parameters.aid]);
-          RAL.callQueue.push(['setPageType', parameters.pgt]);
-          RAL.callQueue.push(['setParameters', {'pgl': parameters.pgl}]);
-          RAL.callQueue.push(['appendParameters',  {'compid' : $this.attr('data-ratId'), 'comptop' : $this.offset().top}]);
-          RAL.callQueue.push(['setCustomParameters',  {'docheight' : $doc.height(), 'winheight' : $win.height()}]);
-          RAL.callQueue.push(['setParameters', extCookies]);
-          if ($.inArray('cv', config) !== -1) {
-            RAL.callQueue.push(['setParameters', {'cv':toJson($this.attr('data-ratCvEvent'))}]);
-          }
-          var dynamicParams = getElementDynamicParams($this[0]);
-          if (dynamicParams.top) {
-            RAL.callQueue.push(['setParameters', dynamicParams.top]);
-          }
-          if (dynamicParams.cp) {
-            RAL.callQueue.push(['setCustomParameters', dynamicParams.cp]);
-          }
-          RAL.callQueue.push(['setOptions', ['url', 'ua']]);
-          var eventMergeAppearElm = document.getElementById('ratMergeEventAppear');
-          var shouldMergeAppear = true;
-          if (eventMergeAppearElm && 'value' in eventMergeAppearElm) {
-            shouldMergeAppear = eventMergeAppearElm.value == "false" ? false : true;
-          }
-          RAL.callQueue.push(['setEvent', 'appear', shouldMergeAppear]);
-        });
-      };
-
-      RAT.bindClick = function($elem, acc, aid) {
-        var $ratClick = $elem.filter(function() {
-          return parseEventConfig($(this).attr('data-ratEvent')).click !== undefined;
-        });
-        setTapClickListener($ratClick, function () {
-          var $this = $(this);
-          var config = parseEventConfig($(this).attr('data-ratEvent')).click;
-          RAL.callQueue.push(['setParameters', getDelta($this.attr('data-ratParam'))]);
-          RAL.callQueue.push(['setAccountId', acc || parameters.acc]);
-          RAL.callQueue.push(['setServiceId', aid || parameters.aid]);
-          RAL.callQueue.push(['setPageType', parameters.pgt]);
-          RAL.callQueue.push(['setParameters', {'pgl': parameters.pgl}]);
-          RAL.callQueue.push(['appendParameters',  {'compid' : $this.attr('data-ratId'), 'comptop' : $this.offset().top}]);
-          RAL.callQueue.push(['setCustomParameters',  {'docheight' : $doc.height(), 'winheight' : $win.height()}]);
-          RAL.callQueue.push(['setParameters', extCookies]);
-          if ($.inArray('cv', config) !== -1) {
-            RAL.callQueue.push(['setParameters', {'cv':toJson($this.attr('data-ratCvEvent'))}]);
-          }
-          var dynamicParams = getElementDynamicParams($this[0]);
-          if (dynamicParams.top) {
-            RAL.callQueue.push(['setParameters', dynamicParams.top]);
-          }
-          if (dynamicParams.cp) {
-            RAL.callQueue.push(['setCustomParameters', dynamicParams.cp]);
-          }
-          RAL.callQueue.push(['setOptions', ['url', 'ua']]);
-          RAL.callQueue.push(['setEvent', 'click']);
-        });
-      };
-
-      RAT.bind = function($elem, acc, aid) {
-        RAT.bindAppear($elem, acc, aid);
-        RAT.bindClick($elem, acc, aid);
-      };
-
-      var $ratElements = $('[data-ratId]');
-      RAT.bind($ratElements);
-
-      addListener(document, 'RAT_BIND', function(event) {
-        if (isType(event.data, 'String')) {
-          RAT.bind($(event.data));
-        }
-      });
-    });
+    var href = elem && elem.attributes && elem.attributes.href && elem.attributes.href.value;
+    if (href && href !== window.location.href) {
+      if (RAL.getTransportMethod() !== 'beacon') {
+        var transportMethod = RAL.getTransportMethod();
+        RAL.callQueue.push(['setTransportMethod', 'beacon']);
+        RAL.processImmediate();
+        RAL.callQueue.push(['setTransportMethod', transportMethod]);
+        RAL.processImmediate();
+      } else {
+        RAL.processImmediate();
+      }
+    }
   }
 
-  // jshint ignore:start
-  // Data Driven Events (Custom Selector)
-  if (!$) {
-    var $Selector = RAT.$Selector
-    var $win = $Selector(window);
-    var $doc = $Selector(document);
+  /**
+   * Gets the first element from either a jQuery or RAT.$Selector selected element object
+   * RAT.$Selector stores elements in `nodes` array whereas jQuery uses direct array access
+   */
+  function firstElementFrom(selectedElement) {
+    return selectedElement.nodes && selectedElement.nodes[0] || selectedElement[0];
+  }
 
+  /**
+   * Runs the provided function when document ready state is complete.
+   */
+  function onDocumentReady(fn) {
+    if ($) {
+      $(fn);
+    } else {
+      if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", fn);
+      } else {
+        fn();
+      }
+    }
+  }
+
+  function getParamsForDataAttributeEvent(select, selectedElement, eventType, acc, aid) {
+    var params = [
+      ['setParameters', getDelta(selectedElement.attr('data-ratParam'))],
+      ['setAccountId', acc || parameters.acc],
+      ['setServiceId', aid || parameters.aid],
+      ['setPageType', parameters.pgt],
+      ['setParameters', {'pgl': parameters.pgl}],
+      ['appendParameters',  {'compid' : selectedElement.attr('data-ratId'), 'comptop' : selectedElement.offset().top}],
+      ['setCustomParameters',  {'docheight' : select(document).height(), 'winheight' : select(window).height()}],
+      ['setParameters', extCookies],
+      ['setOptions', ['url', 'ua']]
+    ];
+
+    var config = parseEventConfig(selectedElement.attr('data-ratEvent'))[eventType];
+    if (select.inArray('cv', config) !== -1) {
+      params.push(['setParameters', {'cv':toJson(selectedElement.attr('data-ratCvEvent'))}]);
+    }
+
+    var dynamicParams = getElementDynamicParams(firstElementFrom(selectedElement));
+    if (dynamicParams.top) {
+      params.push(['setParameters', dynamicParams.top]);
+    }
+
+    if (dynamicParams.cp) {
+      params.push(['setCustomParameters', dynamicParams.cp]);
+    }
+
+    return params;
+  }
+
+  // Data attributes driven events
+  function bindDataAtrributeEvents(select) {
     RAT.bindAppear = function($elem, acc, aid) {
       var $ratAppear = $elem.filter(function() {
-        return parseEventConfig($Selector(this).attr('data-ratEvent')).appear !== undefined;
+        return parseEventConfig(select(this).attr('data-ratEvent')).appear !== undefined;
       });
       $ratAppear.appear(function () {
-        var $this = $Selector(this);
-        var config = parseEventConfig($Selector(this).attr('data-ratEvent')).appear;
-        RAL.callQueue.push(['setParameters', getDelta($this.attr('data-ratParam'))]);
-        RAL.callQueue.push(['setAccountId', acc || parameters.acc]);
-        RAL.callQueue.push(['setServiceId', aid || parameters.aid]);
-        RAL.callQueue.push(['setPageType', parameters.pgt]);
-        RAL.callQueue.push(['setParameters', {'pgl': parameters.pgl}]);
-        RAL.callQueue.push(['appendParameters',  {'compid' : $this.attr('data-ratId'), 'comptop' : $this.offset().top}]);
-        RAL.callQueue.push(['setCustomParameters',  {'docheight' : $doc.height(), 'winheight' : $win.height()}]);
-        RAL.callQueue.push(['setParameters', extCookies]);
-        if ($Selector.inArray('cv', config) !== -1) {
-          RAL.callQueue.push(['setParameters', {'cv':toJson($this.attr('data-ratCvEvent'))}]);
-        }
-        var dynamicParams = getElementDynamicParams($this.nodes[0]);
-        if (dynamicParams.top) {
-          RAL.callQueue.push(['setParameters', dynamicParams.top]);
-        }
-        if (dynamicParams.cp) {
-          RAL.callQueue.push(['setCustomParameters', dynamicParams.cp]);
-        }
-        RAL.callQueue.push(['setOptions', ['url', 'ua']]);
+        var selectedElement = select(this);
+        var eventType = 'appear';
+
+        getParamsForDataAttributeEvent(select, selectedElement, eventType, acc, aid).forEach(function(param) {
+          RAL.callQueue.push(param);
+        });
+
         var eventMergeAppearElm = document.getElementById('ratMergeEventAppear');
         var shouldMergeAppear = true;
         if (eventMergeAppearElm && 'value' in eventMergeAppearElm) {
           shouldMergeAppear = eventMergeAppearElm.value == "false" ? false : true;
         }
+
         RAL.callQueue.push(['setEvent', 'appear', shouldMergeAppear]);
       });
     };
 
     RAT.bindClick = function($elem, acc, aid) {
       var $ratClick = $elem.filter(function() {
-        return parseEventConfig($Selector(this).attr('data-ratevent')).click !== undefined;
+        return parseEventConfig(select(this).attr('data-ratevent')).click !== undefined;
       });
+
       setTapClickListener($ratClick, function () {
-        var $this = $Selector(this);
-        var config = parseEventConfig($this.attr('data-ratEvent')).click;
-        RAL.callQueue.push(['setParameters', getDelta($this.attr('data-ratParam'))]);
-        RAL.callQueue.push(['setAccountId', acc || parameters.acc]);
-        RAL.callQueue.push(['setServiceId', aid || parameters.aid]);
-        RAL.callQueue.push(['setPageType', parameters.pgt]);
-        RAL.callQueue.push(['setParameters', {'pgl': parameters.pgl}]);
-        RAL.callQueue.push(['appendParameters',  {'compid' : $this.attr('data-ratId'), 'comptop' : $this.offset().top}]);
-        RAL.callQueue.push(['setCustomParameters',  {'docheight' : $doc.height(), 'winheight' : $win.height()}]);
-        RAL.callQueue.push(['setParameters', extCookies]);
-        if ($Selector.inArray('cv', config) !== -1) {
-          RAL.callQueue.push(['setParameters', {'cv':toJson($this.attr('data-ratCvEvent'))}]);
-        }
-        var dynamicParams = getElementDynamicParams($this.nodes[0]);
-        if (dynamicParams.top) {
-          RAL.callQueue.push(['setParameters', dynamicParams.top]);
-        }
-        if (dynamicParams.cp) {
-          RAL.callQueue.push(['setCustomParameters', dynamicParams.cp]);
-        }
-        RAL.callQueue.push(['setOptions', ['url', 'ua']]);
+        var selectedElement = select(this);
+        var eventType = 'click' ;
+
+        getParamsForDataAttributeEvent(select, selectedElement, eventType, acc, aid).forEach(function(parameters) {
+          RAL.callQueue.push(parameters);
+        });
+
         RAL.callQueue.push(['setEvent', 'click']);
+        handleRedirect(firstElementFrom(selectedElement));
       });
     };
 
@@ -964,19 +919,29 @@ var RAT = RAT || {};
       RAT.bindClick($elem, acc, aid);
     };
 
-    var $ratElements = $Selector('[data-ratId]');
+    var $ratElements = select('[data-ratId]');
     RAT.bind($ratElements);
 
     addListener(document, 'RAT_BIND', function(event) {
       if (isType(event.data, 'String')) {
-        RAT.bind($Selector(event.data));
+        RAT.bind(select(event.data));
       }
     });
   }
-  // jshint ignore:end
 
   //grab all the rat input tags & parse them
   parseInputTags();
+
+  if ($) {
+    defineAppear($);
+    onDocumentReady(function() {
+      bindDataAtrributeEvents($);
+    });
+  } else {
+    onDocumentReady(function() {
+      bindDataAtrributeEvents(RAT.$Selector);
+    });
+  }
 
   // page performance tracking
   function sendPerfData(timing) {
@@ -1097,6 +1062,14 @@ var RAT = RAT || {};
   var perfFlag = document.getElementById('ratPagePerformance');
   if ((perfFlag && perfFlag.value === 'true') && (window === window.parent)) {
     callOnLoad(addPerfTracker);
+  }
+
+  var sendBeaconFlag = document.getElementById('ratTransportMethod');
+  if (sendBeaconFlag && sendBeaconFlag.value === 'beacon') {
+    RAL.callQueue.push(['setTransportMethod', 'beacon']);
+  } else {
+    // always default to xhr
+    RAL.callQueue.push(['setTransportMethod', 'xhr']);
   }
 
   // Check XHR flag
