@@ -135,7 +135,7 @@ var RAT = RAT || {};
     return (s || '').replace(/([a-z])([A-Z])/g,'$1_$2').toLowerCase();
   }
 
-  function parseEventConfig(attr) {
+  function parseEventConfig(attr) { // jshint ignore:line
     var config = {};
     if (isType(attr, 'String')) {
       if (attr.charAt(0) === '{') {
@@ -235,7 +235,7 @@ var RAT = RAT || {};
   scriptEl.type = 'text/javascript';
   scriptEl.async = 'async';
   scriptEl.defer = 'defer';
-  scriptEl.src = '/assets/js/ral-1.10.0.js';
+  scriptEl.src = 'https://r.r10s.jp/com/rat/js/ral-1.10.0.js';
   var targetEl = document.getElementsByTagName('script')[0];
   targetEl.parentNode.insertBefore(scriptEl, targetEl);
 
@@ -255,24 +255,24 @@ var RAT = RAT || {};
 
   var extCookies = {}, parameters = {}, customParameters = {}, hasCustomParameters = false;
 
-  function getDelta(params) {
-    var delta = {}, hasDelta = false;
-    if (params) {
-      if (params === 'all') {
-        delta = parameters;
-        hasDelta = true;
-      } else {
-        var list = params.split(',');
-        for (var i = 0; i < list.length; i++) {
-          var param = document.getElementById(trim(list[i]));
-          if (param) {
-            hasDelta = addByDefinition(trim(param.id), trim(param.value), delta, parameterDefinitions) || hasDelta;
-          }
+  var getDelta = function(elementParams, parameters) {
+  var delta = {}, hasDelta = false;
+  if (elementParams) {
+    if (elementParams === 'all') {
+      delta = parameters;
+      hasDelta = true;
+    } else {
+      var list = elementParams.split(',');
+      for (var i = 0; i < list.length; i++) {
+        var param = document.getElementById(trim(list[i]));
+        if (param) {
+          hasDelta = addByDefinition(trim(param.id), trim(param.value), delta, parameterDefinitions) || hasDelta;
         }
       }
     }
-    return hasDelta ? delta : null;
   }
+  return hasDelta ? delta : null;
+}; // jshint ignore:line
 
   function parseInputTags() {
     var ratInput = [];
@@ -564,21 +564,108 @@ var RAT = RAT || {};
   };
   RAT.callCostomRequest = RAT.callCustomRequest;
 
-  function defineAppear($) {
-    if ($.fn && !$.fn.appear) {
-      /*
-      jQuery.appear
-      http://code.google.com/p/jquery-appear/
-      Copyright (c) 2009 Michael Hixson
-      Licensed under the MIT license (http://www.opensource.org/licenses/mit-license.php)
-      */
-      // jshint ignore:start
-      (function(a){a.fn.appear=function(e,c){var d=a.extend({data:void 0,one:!0,ratio:0},c);return this.each(function(){var b=a(this);b.appeared=!1;if(e){var g=a(window),f=function(){if(b.is(":visible")){var a=g.scrollLeft(),e=a+g.width(),c=g.scrollTop(),f=c+g.height(),h=b.offset(),l=h.left,m=l+b.width(),h=h.top,n=h+b.height(),k=!isNaN(d.ratio)&&0<d.ratio&&1>=d.ratio?d.ratio:0,k=Math.max(1,k*b.width()*b.height()),a=Math.max(0,Math.min(e,m)-Math.max(a,l)),c=Math.max(0,Math.min(f,n)-Math.max(c,h));a*c>=k?
-      b.appeared||b.trigger("appear",d.data):b.appeared=!1}else b.appeared=!1},c=function(){b.appeared=!0;if(d.one){g.unbind("scroll",f);var c=a.inArray(f,a.fn.appear.checks);0<=c&&a.fn.appear.checks.splice(c,1)}e.apply(this,arguments)};if(d.one)b.one("appear",d.data,c);else b.bind("appear",d.data,c);g.scroll(f);a.fn.appear.checks.push(f);f()}else b.trigger("appear",d.data)})};a.extend(a.fn.appear,{checks:[],timeout:null,checkAll:function(){var e=a.fn.appear.checks.length;if(0<e)for(;e--;)a.fn.appear.checks[e]()},
-      run:function(){a.fn.appear.timeout&&clearTimeout(a.fn.appear.timeout);a.fn.appear.timeout=setTimeout(a.fn.appear.checkAll,20)}});a.each("append prepend after before attr removeAttr addClass removeClass toggleClass remove css show hide".split(" "),function(e,c){var d=a.fn[c];d&&(a.fn[c]=function(){var b=d.apply(this,arguments);a.fn.appear.run();return b})})})($);
-      // jshint ignore:end
-    }
+  var defineAppear = function($) {
+  if ($.fn && !$.fn.appear) {
+    /*
+    jQuery.appear
+    http://code.google.com/p/jquery-appear/
+    Copyright (c) 2009 Michael Hixson
+    Licensed under the MIT license (http://www.opensource.org/licenses/mit-license.php)
+    */
+    // jshint ignore:start
+    (function(a){a.fn.appear=function(e,c){var d=a.extend({data:void 0,one:!0,ratio:0},c);return this.each(function(){var b=a(this);b.appeared=!1;if(e){var g=a(window),f=function(){if(b.is(":visible")){var a=g.scrollLeft(),e=a+g.width(),c=g.scrollTop(),f=c+g.height(),h=b.offset(),l=h.left,m=l+b.width(),h=h.top,n=h+b.height(),k=!isNaN(d.ratio)&&0<d.ratio&&1>=d.ratio?d.ratio:0,k=Math.max(1,k*b.width()*b.height()),a=Math.max(0,Math.min(e,m)-Math.max(a,l)),c=Math.max(0,Math.min(f,n)-Math.max(c,h));a*c>=k?
+    b.appeared||b.trigger("appear",d.data):b.appeared=!1}else b.appeared=!1},c=function(){b.appeared=!0;if(d.one){g.unbind("scroll",f);var c=a.inArray(f,a.fn.appear.checks);0<=c&&a.fn.appear.checks.splice(c,1)}e.apply(this,arguments)};if(d.one)b.one("appear",d.data,c);else b.bind("appear",d.data,c);g.scroll(f);a.fn.appear.checks.push(f);f()}else b.trigger("appear",d.data)})};a.extend(a.fn.appear,{checks:[],timeout:null,checkAll:function(){var e=a.fn.appear.checks.length;if(0<e)for(;e--;)a.fn.appear.checks[e]()},
+    run:function(){a.fn.appear.timeout&&clearTimeout(a.fn.appear.timeout);a.fn.appear.timeout=setTimeout(a.fn.appear.checkAll,20)}});a.each("append prepend after before attr removeAttr addClass removeClass toggleClass remove css show hide".split(" "),function(e,c){var d=a.fn[c];d&&(a.fn[c]=function(){var b=d.apply(this,arguments);a.fn.appear.run();return b})})})($);
+    // jshint ignore:end
   }
+};
+  var bindDataAttributeItemElements = function(parameters, extCookies, defineAppear, toArray, getDelta, getElementDynamicParams) {
+  if ($) {
+    $(function() {
+      defineAppear($);
+      var $ratUnit = $('[data-ratId]').filter(function() {
+        return /\bitem\b/.test($(this).attr('data-ratUnit'));
+      });
+      if ($ratUnit.length === 0) {
+        var itemDivTag = document.getElementById('ratItemDiv');
+        var itemIdsTag = document.getElementById('ratItemId');
+        if (itemDivTag && itemIdsTag) {
+          $ratUnit = $(itemDivTag.value);
+          var itemIds = toArray(itemIdsTag.value);
+          $ratUnit.each(function(){
+            $(this).attr('data-ratId', itemIds[$ratUnit.index(this)]);
+          });
+        }
+      }
+      $ratUnit.appear(function () {
+        var $this = $(this);
+        RAL.callQueue.push(['setAccountId', parameters.acc]);
+        RAL.callQueue.push(['setServiceId', parameters.aid]);
+        RAL.callQueue.push(['setPageType', parameters.pgt]);
+        RAL.callQueue.push(['setParameters', {'pgl': parameters.pgl}]);
+        RAL.callQueue.push(['setGenre', parameters.genre]);
+        RAL.callQueue.push(['setSearchQuery', parameters.sq]);
+        RAL.callQueue.push(['setParameters', {'oa': parameters.oa}]);
+        RAL.callQueue.push(['appendParameters',  {'sresv' : $this.attr('data-ratId')}]);
+        if (extCookies) {
+          RAL.callQueue.push(['setParameters', extCookies]);
+        }
+        RAL.callQueue.push(['setParameters', getDelta($this.attr('data-ratParam'), parameters)]);
+        var dynamicParams = getElementDynamicParams($this[0]);
+        if (dynamicParams.top) {
+          RAL.callQueue.push(['setParameters', dynamicParams.top]);
+        }
+        if (dynamicParams.cp) {
+          RAL.callQueue.push(['setCustomParameters', dynamicParams.cp]);
+        }
+        RAL.callQueue.push(['setEvent', 'scroll']);
+      });
+    });
+  }
+
+  // Appear Event on page view inited (Custom Selector)
+  if (!$) {
+    var $Selector = RAT.$Selector;
+
+    var $ratUnit = $Selector('[data-ratId]').filter(function() {
+      return /\bitem\b/.test($Selector(this).attr('data-ratUnit'));
+    });
+    if ($ratUnit.length === 0) {
+      var itemDivTag = document.getElementById('ratItemDiv');
+      var itemIdsTag = document.getElementById('ratItemId');
+      if (itemDivTag && itemIdsTag) {
+        $ratUnit = $Selector(itemDivTag.value);
+        var itemIds = toArray(itemIdsTag.value);
+        $ratUnit.each(function(){
+          $Selector(this).attr('data-ratId', itemIds[$ratUnit.index(this)]);
+        });
+      }
+    }
+    $ratUnit.appear(function () {
+      var $this = $Selector(this);
+      RAL.callQueue.push(['setAccountId', parameters.acc]);
+      RAL.callQueue.push(['setServiceId', parameters.aid]);
+      RAL.callQueue.push(['setPageType', parameters.pgt]);
+      RAL.callQueue.push(['setParameters', {'pgl': parameters.pgl}]);
+      RAL.callQueue.push(['setGenre', parameters.genre]);
+      RAL.callQueue.push(['setSearchQuery', parameters.sq]);
+      RAL.callQueue.push(['setParameters', {'oa': parameters.oa}]);
+      RAL.callQueue.push(['appendParameters',  {'sresv' : $this.attr('data-ratId')}]);
+      if (setCookies) {
+        RAL.callQueue.push(['setParameters', extCookies]);
+      }
+      RAL.callQueue.push(['setParameters', getDelta($this.attr('data-ratParam'), parameters)]);
+      var dynamicParams = getElementDynamicParams($this.nodes[0]);
+      if (dynamicParams.top) {
+        RAL.callQueue.push(['setParameters', dynamicParams.top]);
+      }
+      if (dynamicParams.cp) {
+        RAL.callQueue.push(['setCustomParameters', dynamicParams.cp]);
+      }
+      RAL.callQueue.push(['setEvent', 'scroll']);
+    });
+  }
+};
 
   function initPageview(savedParameters) {
     if (savedParameters === undefined) {
@@ -689,92 +776,14 @@ var RAT = RAT || {};
         }, 3000);
       }
     }
-
-    if ($) {
-      $(function() {
-        defineAppear($);
-        var $ratUnit = $('[data-ratId]').filter(function() {
-          return /\bitem\b/.test($(this).attr('data-ratUnit'));
-        });
-        if ($ratUnit.length === 0) {
-          var itemDivTag = document.getElementById('ratItemDiv');
-          var itemIdsTag = document.getElementById('ratItemId');
-          if (itemDivTag && itemIdsTag) {
-            $ratUnit = $(itemDivTag.value);
-            var itemIds = toArray(itemIdsTag.value);
-            $ratUnit.each(function(){
-              $(this).attr('data-ratId', itemIds[$ratUnit.index(this)]);
-            });
-          }
-        }
-        $ratUnit.appear(function () {
-          var $this = $(this);
-          RAL.callQueue.push(['setAccountId', savedParameters.acc]);
-          RAL.callQueue.push(['setServiceId', savedParameters.aid]);
-          RAL.callQueue.push(['setPageType', savedParameters.pgt]);
-          RAL.callQueue.push(['setParameters', {'pgl': savedParameters.pgl}]);
-          RAL.callQueue.push(['setGenre', savedParameters.genre]);
-          RAL.callQueue.push(['setSearchQuery', savedParameters.sq]);
-          RAL.callQueue.push(['setParameters', {'oa': savedParameters.oa}]);
-          RAL.callQueue.push(['appendParameters',  {'sresv' : $this.attr('data-ratId')}]);
-          RAL.callQueue.push(['setParameters', extCookies]);
-          RAL.callQueue.push(['setParameters', getDelta($this.attr('data-ratParam'))]);
-          var dynamicParams = getElementDynamicParams($this[0]);
-          if (dynamicParams.top) {
-            RAL.callQueue.push(['setParameters', dynamicParams.top]);
-          }
-          if (dynamicParams.cp) {
-            RAL.callQueue.push(['setCustomParameters', dynamicParams.cp]);
-          }
-          RAL.callQueue.push(['setEvent', 'scroll']);
-        });
-      });
-    }
-
-    // jshint ignore:start
-    // Appear Event on page view inited (Custom Selector)
-    if (!$) {
-      var $Selector = RAT.$Selector;
-
-      var $ratUnit = $Selector('[data-ratId]').filter(function() {
-        return /\bitem\b/.test($Selector(this).attr('data-ratUnit'));
-      });
-      if ($ratUnit.length === 0) {
-        var itemDivTag = document.getElementById('ratItemDiv');
-        var itemIdsTag = document.getElementById('ratItemId');
-        if (itemDivTag && itemIdsTag) {
-          $ratUnit = $Selector(itemDivTag.value);
-          var itemIds = toArray(itemIdsTag.value);
-          $ratUnit.each(function(){
-            $Selector(this).attr('data-ratId', itemIds[$ratUnit.index(this)]);
-          });
-        }
-      }
-      $ratUnit.appear(function () {
-        var $this = $Selector(this);
-        RAL.callQueue.push(['setAccountId', savedParameters.acc]);
-        RAL.callQueue.push(['setServiceId', savedParameters.aid]);
-        RAL.callQueue.push(['setPageType', savedParameters.pgt]);
-        RAL.callQueue.push(['setParameters', {'pgl': savedParameters.pgl}]);
-        RAL.callQueue.push(['setGenre', savedParameters.genre]);
-        RAL.callQueue.push(['setSearchQuery', savedParameters.sq]);
-        RAL.callQueue.push(['setParameters', {'oa': savedParameters.oa}]);
-        RAL.callQueue.push(['appendParameters',  {'sresv' : $this.attr('data-ratId')}]);
-        RAL.callQueue.push(['setParameters', extCookies]);
-        RAL.callQueue.push(['setParameters', getDelta($this.attr('data-ratParam'))]);
-        var dynamicParams = getElementDynamicParams($this.nodes[0]);
-        if (dynamicParams.top) {
-          RAL.callQueue.push(['setParameters', dynamicParams.top]);
-        }
-        if (dynamicParams.cp) {
-          RAL.callQueue.push(['setCustomParameters', dynamicParams.cp]);
-        }
-        RAL.callQueue.push(['setEvent', 'scroll']);
-      });
-    }
-    // jshint ignore:end
+    
+    bindDataAttributeItemElements(savedParameters, extCookies, defineAppear, toArray, getDelta, getElementDynamicParams);
   }
 
+  //grab all the rat input tags & parse them
+  parseInputTags();
+
+  var bindDataAttributeEvents = function bindDataAtrributeEvents(select, extCookies, parameters, getDelta, parseEventConfig, getElementDynamicParams) {
   function setTapClickListener(jqueryElem, handler) {
     var activeElement;
     var preventGhostClick = false;
@@ -801,9 +810,11 @@ var RAT = RAT || {};
   }
 
   function handleRedirect(elem) {
+    console.log(elem)
     if (!RAL.live) {
       return;
     }
+  
 
     var href = elem && elem.attributes && elem.attributes.href && elem.attributes.href.value;
     if (href && href !== window.location.href) {
@@ -818,128 +829,120 @@ var RAT = RAT || {};
       }
     }
   }
-
+  
   /**
    * Gets the first element from either a jQuery or RAT.$Selector selected element object
    * RAT.$Selector stores elements in `nodes` array whereas jQuery uses direct array access
    */
-  function firstElementFrom(selectedElement) {
+  function firstElementFrom (selectedElement) {
     return selectedElement.nodes && selectedElement.nodes[0] || selectedElement[0];
   }
-
-  /**
-   * Runs the provided function when document ready state is complete.
-   */
-  function onDocumentReady(fn) {
-    if ($) {
-      $(fn);
-    } else {
-      if (document.readyState === "loading") {
-        document.addEventListener("DOMContentLoaded", fn);
-      } else {
-        fn();
-      }
-    }
-  }
-
+  
   function getParamsForDataAttributeEvent(select, selectedElement, eventType, acc, aid) {
     var params = [
-      ['setParameters', getDelta(selectedElement.attr('data-ratParam'))],
+      ['setParameters', getDelta(selectedElement.attr('data-ratParam'), parameters)],
       ['setAccountId', acc || parameters.acc],
       ['setServiceId', aid || parameters.aid],
       ['setPageType', parameters.pgt],
       ['setParameters', {'pgl': parameters.pgl}],
       ['appendParameters',  {'compid' : selectedElement.attr('data-ratId'), 'comptop' : selectedElement.offset().top}],
       ['setCustomParameters',  {'docheight' : select(document).height(), 'winheight' : select(window).height()}],
-      ['setParameters', extCookies],
       ['setOptions', ['url', 'ua']]
     ];
-
+    if (extCookies) {
+      params.push(['setParameters', extCookies]);
+    }
+  
     var config = parseEventConfig(selectedElement.attr('data-ratEvent'))[eventType];
     if (select.inArray('cv', config) !== -1) {
       params.push(['setParameters', {'cv':toJson(selectedElement.attr('data-ratCvEvent'))}]);
     }
-
+  
     var dynamicParams = getElementDynamicParams(firstElementFrom(selectedElement));
     if (dynamicParams.top) {
       params.push(['setParameters', dynamicParams.top]);
     }
-
+  
     if (dynamicParams.cp) {
       params.push(['setCustomParameters', dynamicParams.cp]);
     }
-
+  
     return params;
   }
 
-  // Data attributes driven events
-  function bindDataAtrributeEvents(select) {
-    RAT.bindAppear = function($elem, acc, aid) {
-      var $ratAppear = $elem.filter(function() {
-        return parseEventConfig(select(this).attr('data-ratEvent')).appear !== undefined;
-      });
-      $ratAppear.appear(function () {
-        var selectedElement = select(this);
-        var eventType = 'appear';
-
-        getParamsForDataAttributeEvent(select, selectedElement, eventType, acc, aid).forEach(function(param) {
-          RAL.callQueue.push(param);
-        });
-
-        var eventMergeAppearElm = document.getElementById('ratMergeEventAppear');
-        var shouldMergeAppear = true;
-        if (eventMergeAppearElm && 'value' in eventMergeAppearElm) {
-          shouldMergeAppear = eventMergeAppearElm.value == "false" ? false : true;
-        }
-
-        RAL.callQueue.push(['setEvent', 'appear', shouldMergeAppear]);
-      });
-    };
-
-    RAT.bindClick = function($elem, acc, aid) {
-      var $ratClick = $elem.filter(function() {
-        return parseEventConfig(select(this).attr('data-ratevent')).click !== undefined;
-      });
-
-      setTapClickListener($ratClick, function () {
-        var selectedElement = select(this);
-        var eventType = 'click' ;
-
-        getParamsForDataAttributeEvent(select, selectedElement, eventType, acc, aid).forEach(function(parameters) {
-          RAL.callQueue.push(parameters);
-        });
-
-        RAL.callQueue.push(['setEvent', 'click']);
-        handleRedirect(firstElementFrom(selectedElement));
-      });
-    };
-
-    RAT.bind = function($elem, acc, aid) {
-      RAT.bindAppear($elem, acc, aid);
-      RAT.bindClick($elem, acc, aid);
-    };
-
-    var $ratElements = select('[data-ratId]');
-    RAT.bind($ratElements);
-
-    addListener(document, 'RAT_BIND', function(event) {
-      if (isType(event.data, 'String')) {
-        RAT.bind(select(event.data));
-      }
+  RAT.bindAppear = function($elem, acc, aid) {
+    var $ratAppear = $elem.filter(function() {
+      return parseEventConfig(select(this).attr('data-ratEvent')).appear !== undefined;
     });
+    $ratAppear.appear(function () {
+      var selectedElement = select(this);
+      var eventType = 'appear';
+
+      getParamsForDataAttributeEvent(select, selectedElement, eventType, acc, aid).forEach(function(param) {
+        RAL.callQueue.push(param);
+      });
+
+      var eventMergeAppearElm = document.getElementById('ratMergeEventAppear');
+      var shouldMergeAppear = true;
+      if (eventMergeAppearElm && 'value' in eventMergeAppearElm) {
+        shouldMergeAppear = eventMergeAppearElm.value == "false" ? false : true;
+      }
+
+      RAL.callQueue.push(['setEvent', 'appear', shouldMergeAppear]);
+    });
+  };
+
+  RAT.bindClick = function($elem, acc, aid) {
+    var $ratClick = $elem.filter(function() {
+      return parseEventConfig(select(this).attr('data-ratevent')).click !== undefined;
+    });
+
+    setTapClickListener($ratClick, function () {
+      var selectedElement = select(this);
+      var eventType = 'click' ;
+
+      getParamsForDataAttributeEvent(select, selectedElement, eventType, acc, aid).forEach(function(parameters) {
+        RAL.callQueue.push(parameters);
+      });
+
+      RAL.callQueue.push(['setEvent', 'click']);
+      handleRedirect(firstElementFrom(selectedElement));
+    });
+  };
+
+  RAT.bind = function($elem, acc, aid) {
+    RAT.bindAppear($elem, acc, aid);
+    RAT.bindClick($elem, acc, aid);
+  };
+
+  var $ratElements = select('[data-ratId]');
+  RAT.bind($ratElements);
+
+  addListener(document, 'RAT_BIND', function(event) {
+    if (isType(event.data, 'String')) {
+      RAT.bind(select(event.data));
+    }
+  });
+};
+  var onDocumentReady = function(fn) {
+  if ($) {
+    $(fn);
+  } else {
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", fn);
+    } else {
+      fn();
+    }
   }
-
-  //grab all the rat input tags & parse them
-  parseInputTags();
-
+};
   if ($) {
     defineAppear($);
     onDocumentReady(function() {
-      bindDataAtrributeEvents($);
+      bindDataAttributeEvents($, extCookies, parameters, getDelta, parseEventConfig, getElementDynamicParams);
     });
   } else {
     onDocumentReady(function() {
-      bindDataAtrributeEvents(RAT.$Selector);
+      bindDataAttributeEvents(RAT.$Selector, extCookies, parameters, getDelta, parseEventConfig, getElementDynamicParams);
     });
   }
 
